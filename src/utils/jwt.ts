@@ -3,9 +3,7 @@ import { getJwtSecret } from "./getJwtSecret.js";
 
 // Definimos la interfaz (tipo) para el payload (contenido) del token JWT
 interface JwtPayload {
-  id: string;             // Identificador único del usuario
-  role: "user" | "admin"; // Rol del usuario (solo puede ser 'user' o 'admin')
-  email: string;          // Email del usuario
+  id: string; // Identificador único del usuario
 }
 
 /**
@@ -35,19 +33,19 @@ export const verifyToken = (token: string): JwtPayload => {
     const decoded = jwt.verify(token, getJwtSecret());
 
     // Verificamos que el token decodificado tenga la estructura correcta
-    if (typeof decoded === "object" && "id" in decoded && "role" in decoded && "email" in decoded) {
+    if (typeof decoded === "object" && "id" in decoded) {
       // Hacemos type assertion (asegurar el tipo) ya que hemos verificado la estructura
       return decoded as JwtPayload;
     }
 
     // Si falta algún campo obligatorio, lanzamos error
     throw new Error("Token inválido: falta el campo 'id'");
-  } catch (err) {
+  } catch (error) {
     // Manejo específico de errores conocidos de JWT:
-    if (err instanceof TokenExpiredError) {
+    if (error instanceof TokenExpiredError) {
       throw new Error("El token ha expirado");
     }
-    if (err instanceof JsonWebTokenError) {
+    if (error instanceof JsonWebTokenError) {
       throw new Error("El token es inválido");
     }
 
