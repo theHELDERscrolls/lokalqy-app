@@ -23,7 +23,7 @@ interface AuthenticatedRequest extends Request {
  * @throws {401} Si no hay usuario autenticado (req.user no existe)
  * @throws {403} Si el usuario no tiene los permisos requeridos
  */
-export const hasRole = (roles: Array<"user" | "admin">): Function => {
+export const hasRole = (roles: Array<"user" | "admin">) => {
   /**
    * Middleware que verifica los roles del usuario autenticado
    * @param {AuthenticatedRequest} req - Request de Express con usuario

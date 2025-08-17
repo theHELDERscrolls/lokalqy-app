@@ -1,2 +1,2 @@
-export * from "./isAdmin.js";
+export * from "./hasRole.js";
 export * from "./isAuth.js";
