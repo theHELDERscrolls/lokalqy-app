@@ -1,4 +1,4 @@
-import type { UserDoc } from "@/types/user.type.js";
+import type { UserDoc } from "../types/index.js";
 import type { NextFunction, Request, Response } from "express";
 
 interface AuthenticatedRequest extends Request {

@@ -1,4 +1,4 @@
-import type { IUser } from "@/types/user.type.js";
+import type { IUser } from "../../types/index.js";
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 

@@ -1,4 +1,4 @@
-import { isAuth } from "@/middlewares/index.js";
+import { isAuth } from "../../middlewares/index.js";
 import express from "express";
 
 export const vehiclesRouter = express.Router();

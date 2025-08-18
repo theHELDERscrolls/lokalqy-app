@@ -1,4 +1,4 @@
-import { hasRole, isAuth } from "@/middlewares/index.js";
+import { hasRole, isAuth } from "../../middlewares/index.js";
 import express from "express";
 
 export const usersRouter = express.Router();

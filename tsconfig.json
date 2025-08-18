@@ -15,9 +15,9 @@
     // and npm install -D @types/node
 
     // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    // "sourceMap": true,
+    // "declaration": true,
+    // "declarationMap": true,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
@@ -40,20 +40,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true,
-
-    // Path Aliases
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"],
-      "@api/*": ["api/*"],
-      "@config/*": ["config/*"],
-      "@controllers/*": ["api/controllers/*"],
-      "@middlewares/*": ["middlewares/*"],
-      "@models/*": ["api/models/*"],
-      "@routes/*": ["api/routes/*"],
-      "@types/*": ["types/*"],
-      "@utils/*": ["utils/*"]
-    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]

@@ -12,7 +12,7 @@ app.use(express.json());
 
 connectDB();
 
-app.use("/api/v1/users/", authRouter);
+app.use("/api/v1/auth/", authRouter);
 app.use("/api/v1/users/", usersRouter);
 app.use("/api/v1/properties/", propertiesRouter);
 app.use("/api/v1/vehicles/", vehiclesRouter);
