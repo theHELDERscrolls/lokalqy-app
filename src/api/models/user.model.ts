@@ -28,18 +28,13 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      required: true,
       enum: {
         values: ["user", "admin"],
         message: "Rol no válido",
       },
       default: "user",
     },
-    image: {
-      type: String,
-      required: [true, "La imagen es obligatoria"],
-      trim: true,
-    },
+    image: { type: String },
     properties: [{ type: Schema.Types.ObjectId, ref: "properties" }],
     vehicles: [{ type: Schema.Types.ObjectId, ref: "vehicles" }],
   },
@@ -50,7 +45,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   try {
-    const salt = await bcrypt.genSalt(12); 
+    const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {

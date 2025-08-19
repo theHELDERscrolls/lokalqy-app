@@ -1,9 +1,10 @@
 import { User } from "../models/index.js";
+import mongoose from "mongoose";
+import type { IUser } from "../../types/index.js";
 import type { NextFunction, Request, Response } from "express";
-import type { UserDoc } from "../../types/index.js";
 
 export const register = async (
-  req: Request<{}, {}, UserDoc>,
+  req: Request<{}, {}, IUser>,
   res: Response,
   _next: NextFunction
 ): Promise<Response> => {
@@ -18,7 +19,7 @@ export const register = async (
       return res.status(409).json({ error: `El usuario con el nombre ${name} ya existe` });
     }
 
-    const userEmailDuplicated = await User.findOne({ name });
+    const userEmailDuplicated = await User.findOne({ email });
     if (userEmailDuplicated) {
       return res.status(409).json({ error: `El usuario con el email ${email} ya existe` });
     }
@@ -26,8 +27,15 @@ export const register = async (
     const user = new User(req.body);
     const userSaved = await user.save();
 
-    return res.status(201).json({ message: "Usuario registrado", user: userSaved });
+    const { password: _, ...safeUserData } = userSaved.toObject();
+
+    return res.status(201).json({ message: "Usuario registrado", user: safeUserData });
   } catch (error) {
-    return res.status(400).json("Error en el registro");
+    if (error instanceof mongoose.Error.ValidationError) {
+      const errors = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({ error: errors });
+    }
+
+    return res.status(500).json("Error interno en el registro");
   }
 };
