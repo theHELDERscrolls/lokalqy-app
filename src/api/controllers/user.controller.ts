@@ -2,6 +2,8 @@ import { User } from "../models/index.js";
 import mongoose from "mongoose";
 import type { IUser } from "../../types/index.js";
 import type { NextFunction, Request, Response } from "express";
+import bcrypt from "bcrypt";
+import { generateToken } from "../../utils/jwt.js";
 
 export const register = async (
   req: Request<{}, {}, IUser>,
@@ -37,5 +39,31 @@ export const register = async (
     }
 
     return res.status(500).json("Error interno en el registro");
+  }
+};
+
+export const login = async (req: Request<{}, {}, IUser>, res: Response, _next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(400).json("Usuario o contraseña incorrectos");
+    }
+
+    const userId = user._id.toString();
+    if (!userId) {
+      return res.status(500).json("Error interno: usuario sin ID");
+    }
+
+    if (bcrypt.compareSync(password, user.password)) {
+      const { password: _, ...safeUserData } = user.toObject();
+      const token = generateToken({ id: userId });
+      return res.status(200).json({ token, user: safeUserData });
+    } else {
+      return res.status(400).json("Usuario o contraseña incorrectos");
+    }
+  } catch (error) {
+    return res.status(400).json("Error al realizar el login");
   }
 };
