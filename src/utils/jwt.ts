@@ -1,10 +1,14 @@
-import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { getJwtSecret } from "./getJwtSecret.js";
 
 // Definimos la interfaz (tipo) para el payload (contenido) del token JWT
 interface JwtPayload {
   id: string; // Identificador único del usuario
 }
+
+// Destructuring de tipos específicos de jwt necesarios para el manejo de errores
+// Nota: Esto es necesario porque jsonwebtoken no exporta directamente estos tipos en ESM
+const { JsonWebTokenError, TokenExpiredError } = jwt;
 
 /**
  * Función para generar un nuevo token JWT

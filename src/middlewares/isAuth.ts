@@ -1,6 +1,6 @@
-import { User } from "@/api/models/user.model.js";
-import type { UserDoc } from "@/types/user.type.js";
-import { verifyToken } from "@/utils/jwt.js";
+import { User } from "../api/models/index.js";
+import type { UserDoc } from "../types/index.js";
+import { verifyToken } from "../utils/index.js";
 import type { NextFunction, Request, Response } from "express";
 
 // Extendemos el tipo Request de Express para añadir la propiedad user

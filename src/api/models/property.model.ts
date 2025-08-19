@@ -1,4 +1,4 @@
-import type { IProperty } from "@/types/property.type.js";
+import type { IProperty } from "../../types/index.js";
 import mongoose, { Schema } from "mongoose";
 
 const propertySchema = new Schema<IProperty>(

@@ -1,4 +1,4 @@
-import type { IVehicle } from "@/types/vehicle.type.js";
+import type { IVehicle } from "../../types/index.js";
 import mongoose, { Schema } from "mongoose";
 
 const vehicleSchema = new Schema<IVehicle>(
