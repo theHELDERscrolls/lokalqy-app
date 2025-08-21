@@ -1,4 +1,4 @@
-import { deleteUser, getAllUsers, getUser, updateUser } from "../controllers/user.controller.js";
+import { deleteUser, getAllUsers, getUser, updateUser } from "../controllers/index.js";
 import { hasRole, isAuth } from "../../middlewares/index.js";
 import express from "express";
 

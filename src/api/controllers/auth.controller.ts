@@ -1,9 +1,9 @@
-import { generateToken } from "../../utils/jwt.js";
+import { generateToken } from "../../utils/index.js";
 import { User } from "../models/index.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import type { IUser } from "../../types/index.js";
-import type { NextFunction, Request, Response } from "express";
+import type {  Request, Response } from "express";
 
 /**
  * Controlador para el registro de nuevos usuarios
@@ -11,7 +11,6 @@ import type { NextFunction, Request, Response } from "express";
  * @function register
  * @param {Request<{}, {}, IUser>} req - Request de Express con los datos del usuario
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada en este controlador)
  * @returns {Promise<Response>} Respuesta JSON con el resultado de la operación
  *
  * @throws {400} Si faltan campos obligatorios o hay errores de validación
@@ -24,11 +23,7 @@ import type { NextFunction, Request, Response } from "express";
  * 2. Unicidad del nombre y email
  * 3. Cumplimiento de las reglas de validación del modelo
  */
-export const register = async (
-  req: Request<{}, {}, IUser>,
-  res: Response,
-  _next: NextFunction
-): Promise<Response> => {
+export const register = async (req: Request<{}, {}, IUser>, res: Response): Promise<Response> => {
   try {
     // Extraemos los campos del body de la request
     const { name, email, password } = req.body;
@@ -84,7 +79,6 @@ export const register = async (
  * @function login
  * @param {Request<{}, {}, IUser>} req - Request de Express con credenciales
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada)
  * @returns {Promise<Response>} Respuesta JSON con token y datos de usuario
  *
  * @throws {400} Si las credenciales son incorrectas
@@ -96,7 +90,7 @@ export const register = async (
  * 2. Corrección de la contraseña mediante bcrypt
  * 3. Generación de un token JWT para autenticación posterior
  */
-export const login = async (req: Request<{}, {}, IUser>, res: Response, _next: NextFunction) => {
+export const login = async (req: Request<{}, {}, IUser>, res: Response) => {
   try {
     const { email, password } = req.body;
 

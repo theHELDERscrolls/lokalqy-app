@@ -1,5 +1,5 @@
-import type { NextFunction, Request, Response } from "express";
-import { User } from "../models/user.model.js";
+import type { Request, Response } from "express";
+import { User } from "../models/index.js";
 
 /**
  * Obtiene todos los usuarios del sistema excluyendo información sensible
@@ -7,7 +7,6 @@ import { User } from "../models/user.model.js";
  * @function getAllUsers
  * @param {Request} _req - Objeto Request de Express (no se utilizan parámetros)
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada en este controlador)
  * @returns {Promise<Response>} Respuesta JSON con array de usuarios en el formato especificado
  *
  * @throws {400} Si ocurre un error en la consulta a la base de datos
@@ -30,13 +29,13 @@ import { User } from "../models/user.model.js";
  * //   }
  * // ]
  */
-export const getAllUsers = async (_req: Request, res: Response, _next: NextFunction) => {
+export const getAllUsers = async (_req: Request, res: Response) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find().select("-password").populate("properties", "vehicles");
 
     return res.status(200).json(users);
   } catch (error) {
-    return res.status(400).json("Error al obtener los users");
+    return res.status(400).json("Error al obtener los usuarios");
   }
 };
 
@@ -46,7 +45,6 @@ export const getAllUsers = async (_req: Request, res: Response, _next: NextFunct
  * @function getUser
  * @param {Request<{ id: string }>} req - Request de Express con ID en parámetros
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada)
  * @returns {Promise<Response>} Respuesta JSON con el usuario encontrado en el formato especificado
  *
  * @throws {404} Si el usuario no existe
@@ -68,11 +66,14 @@ export const getAllUsers = async (_req: Request, res: Response, _next: NextFunct
  * //   "__v": 0
  * // }
  */
-export const getUser = async (req: Request<{ id: string }>, res: Response, _next: NextFunction) => {
+export const getUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(id)
+      .select("-password")
+      .populate("properties")
+      .populate("vehicles");
 
     if (!user) {
       return res.status(404).json("Usuario no encontrado");
@@ -90,7 +91,6 @@ export const getUser = async (req: Request<{ id: string }>, res: Response, _next
  * @function updateUser
  * @param {Request<{ id: string }>} req - Request de Express con ID y datos a actualizar
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada)
  * @returns {Promise<Response>} Respuesta JSON con el usuario actualizado en el formato especificado
  *
  * @throws {404} Si el usuario no existe
@@ -118,11 +118,7 @@ export const getUser = async (req: Request<{ id: string }>, res: Response, _next
  * //   "__v": 0
  * // }
  */
-export const updateUser = async (
-  req: Request<{ id: string }>,
-  res: Response,
-  _next: NextFunction
-) => {
+export const updateUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -144,7 +140,6 @@ export const updateUser = async (
  * @function deleteUser
  * @param {Request<{ id: string }>} req - Request de Express con ID en parámetros
  * @param {Response} res - Objeto Response de Express
- * @param {NextFunction} _next - Función next (no utilizada)
  * @returns {Promise<Response>} Respuesta JSON con confirmación y datos del usuario eliminado
  *
  * @throws {404} Si el usuario no existe
@@ -174,15 +169,14 @@ export const updateUser = async (
  * //   }
  * // }
  */
-export const deleteUser = async (
-  req: Request<{ id: string }>,
-  res: Response,
-  _next: NextFunction
-) => {
+export const deleteUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
 
-    const userDeleted = await User.findByIdAndDelete(id).select("-password");
+    const userDeleted = await User.findByIdAndDelete(id)
+      .select("-password")
+      .populate("properties")
+      .populate("vehicles");
 
     if (!userDeleted) {
       return res.status(404).json("Usuario no encontrado");

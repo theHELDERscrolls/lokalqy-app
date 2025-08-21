@@ -45,7 +45,7 @@ const propertySchema = new Schema<IProperty>(
       min: [0, "Los gastos no pueden ser negativos"],
     },
     paid: { type: Boolean, required: true, default: false },
-    image: { type: String, required: [true, "La imagen es obligatoria"] },
+    image: { type: String },
     owner: {
       type: Schema.Types.ObjectId,
       required: [true, "El propietario es obligatorio"],
