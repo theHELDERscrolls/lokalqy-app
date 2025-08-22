@@ -1,4 +1,4 @@
-import { Property, User, Vehicle } from "../models/index.js";
+import { User, Vehicle } from "../models/index.js";
 import type { Response } from "express";
 import type { AuthenticatedRequest } from "../../types/index.js";
 
@@ -15,7 +15,7 @@ import type { AuthenticatedRequest } from "../../types/index.js";
 export const getVehicles = async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Busca vehículos que pertenezcan al usuario autenticado
-    const vehicles = await Property.find({ owner: req.user?._id });
+    const vehicles = await Vehicle.find({ owner: req.user?._id });
 
     return res.status(200).json(vehicles);
   } catch (error) {
