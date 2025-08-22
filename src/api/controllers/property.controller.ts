@@ -1,21 +1,6 @@
-import type { Request, Response } from "express";
 import { Property, User } from "../models/index.js";
-import type { UserDoc } from "../../types/index.js";
-
-/**
- * Interfaz extendida de Request de Express que incluye información del usuario autenticado
- * @interface AuthenticatedRequest
- * @template Params - Tipo de los parámetros de ruta
- * @template ResBody - Tipo del cuerpo de la respuesta
- * @template ReqBody - Tipo del cuerpo de la solicitud
- * @template ReqQuery - Tipo de los parámetros de consulta
- * @extends Request
- * @property {Omit<UserDoc, "password">} [user] - Información del usuario autenticado sin el campo password
- */
-interface AuthenticatedRequest<Params = {}, ResBody = any, ReqBody = any, ReqQuery = any>
-  extends Request<Params, ResBody, ReqBody, ReqQuery> {
-  user?: Omit<UserDoc, "password">;
-}
+import type { AuthenticatedRequest } from "../../types/index.js";
+import type { Response } from "express";
 
 /**
  * Obtiene todas las propiedades del usuario autenticado

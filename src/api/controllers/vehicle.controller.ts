@@ -1,12 +1,6 @@
-import type { Request, Response } from "express";
 import { Property, User, Vehicle } from "../models/index.js";
-import type { UserDoc } from "../../types/index.js";
-
-// Interfaz extendida que incluye información de usuario autenticado
-interface AuthenticatedRequest<Params = {}, ResBody = any, ReqBody = any, ReqQuery = any>
-  extends Request<Params, ResBody, ReqBody, ReqQuery> {
-  user?: Omit<UserDoc, "password">; // Usuario sin campo password por seguridad
-}
+import type {  Response } from "express";
+import type { AuthenticatedRequest } from "../../types/index.js";
 
 /**
  * Obtiene todos los vehículos del usuario autenticado

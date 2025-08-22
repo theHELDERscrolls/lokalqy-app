@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { User } from "../models/index.js";
+import type { AuthenticatedRequest } from "../../types/index.js";
 
 /**
  * Obtiene todos los usuarios del sistema excluyendo información sensible
@@ -129,10 +130,15 @@ export const getUser = async (req: Request<{ id: string }>, res: Response) => {
  * //   "__v": 0
  * // }
  */
-export const updateUser = async (req: Request<{ id: string }>, res: Response) => {
+export const updateUser = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
   try {
     // Extrae el ID de los parámetros de la URL
     const { id } = req.params;
+
+    if (!req.user || req.user.role !== "admin") {
+      // Si no es admin, eliminamos el campo role del body antes de actualizar
+      delete req.body.role;
+    }
 
     // Busca y actualiza el usuario por ID
     // req.body contiene los campos a actualizar (name, email, etc.)

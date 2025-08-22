@@ -3,7 +3,7 @@ import { User } from "../models/index.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import type { IUser } from "../../types/index.js";
-import type {  Request, Response } from "express";
+import type { Request, Response } from "express";
 
 /**
  * Controlador para el registro de nuevos usuarios
@@ -45,8 +45,8 @@ export const register = async (req: Request<{}, {}, IUser>, res: Response): Prom
       return res.status(409).json({ error: `El usuario con el email ${email} ya existe` });
     }
 
-    // Creación del nuevo usuario con los datos recibidos
-    const user = new User(req.body);
+    // Creación del nuevo usuario con los datos recibidos forzando el role "user"
+    const user = new User({ ...req.body, role: "user" });
 
     // Guardado del usuario en la base de datos
     const userSaved = await user.save();
