@@ -12,7 +12,7 @@ import type { AuthenticatedRequest } from "../../types/index.js";
  * @throws {400} Si ocurre un error en la consulta
  * @throws {200} Si la operación es exitosa
  */
-export const getVehicles = async (req: AuthenticatedRequest, res: Response) => {
+export const getVehicles = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     // Busca vehículos que pertenezcan al usuario autenticado
     const vehicles = await Vehicle.find({ owner: req.user?._id });
@@ -34,7 +34,10 @@ export const getVehicles = async (req: AuthenticatedRequest, res: Response) => {
  * @throws {400} Si ocurre un error en la consulta
  * @throws {200} Si la operación es exitosa
  */
-export const getVehicle = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const getVehicle = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
 
@@ -61,7 +64,10 @@ export const getVehicle = async (req: AuthenticatedRequest<{ id: string }>, res:
  * @throws {400} Si ocurre un error al crear
  * @throws {201} Si la operación es exitosa
  */
-export const createVehicle = async (req: AuthenticatedRequest, res: Response) => {
+export const createVehicle = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
   try {
     // Añade el ID del usuario autenticado como propietario
     const vehicleData = { ...req.body, owner: req.user?._id };
@@ -91,7 +97,10 @@ export const createVehicle = async (req: AuthenticatedRequest, res: Response) =>
  * @throws {400} Si ocurre un error en la actualización
  * @throws {200} Si la operación es exitosa
  */
-export const updateVehicle = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const updateVehicle = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
 
@@ -123,7 +132,10 @@ export const updateVehicle = async (req: AuthenticatedRequest<{ id: string }>, r
  * @throws {400} Si ocurre un error al eliminar
  * @throws {200} Si la operación es exitosa
  */
-export const deleteVehicle = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const deleteVehicle = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
 

@@ -12,7 +12,10 @@ import type { Response } from "express";
  * @throws {400} Si ocurre un error en la consulta
  * @throws {200} Si la operación es exitosa
  */
-export const getProperties = async (req: AuthenticatedRequest, res: Response) => {
+export const getProperties = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
   try {
     // Busca propiedades que pertenezcan al usuario autenticado
     const properties = await Property.find({ owner: req.user?._id });
@@ -33,7 +36,10 @@ export const getProperties = async (req: AuthenticatedRequest, res: Response) =>
  * @throws {400} Si ocurre un error en la consulta
  * @throws {200} Si la operación es exitosa
  */
-export const getProperty = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const getProperty = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     // Busca propiedad por ID que además pertenezca al usuario autenticado
@@ -59,7 +65,10 @@ export const getProperty = async (req: AuthenticatedRequest<{ id: string }>, res
  * @throws {400} Si ocurre un error al crear
  * @throws {201} Si la operación es exitosa
  */
-export const createProperty = async (req: AuthenticatedRequest, res: Response) => {
+export const createProperty = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
   try {
     // Añade el ID del usuario autenticado como propietario
     const propertyData = { ...req.body, owner: req.user?._id };
@@ -88,7 +97,10 @@ export const createProperty = async (req: AuthenticatedRequest, res: Response) =
  * @throws {400} Si ocurre un error en la actualización
  * @throws {200} Si la operación es exitosa
  */
-export const updateProperty = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const updateProperty = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     // Busca y actualiza propiedad que pertenezca al usuario autenticado
@@ -119,7 +131,10 @@ export const updateProperty = async (req: AuthenticatedRequest<{ id: string }>, 
  * @throws {400} Si ocurre un error al eliminar
  * @throws {200} Si la operación es exitosa
  */
-export const deleteProperty = async (req: AuthenticatedRequest<{ id: string }>, res: Response) => {
+export const deleteProperty = async (
+  req: AuthenticatedRequest<{ id: string }>,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     // Busca y elimina propiedad que pertenezca al usuario autenticado

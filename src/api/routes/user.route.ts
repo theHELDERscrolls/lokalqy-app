@@ -7,4 +7,4 @@ export const usersRouter = express.Router();
 usersRouter.get("/", isAuth, hasRole(["admin"]), getAllUsers);
 usersRouter.get("/:id", isAuth, getUser);
 usersRouter.put("/:id", isAuth, updateUser);
-usersRouter.delete("/:id", isAuth, hasRole(["admin"]), deleteUser);
+usersRouter.delete("/:id", isAuth, deleteUser);

@@ -70,7 +70,7 @@ export const register = async (req: Request<{}, {}, IUser>, res: Response): Prom
  * @throws {500} Si ocurre un error interno
  * @throws {200} Si la autenticación es exitosa
  */
-export const login = async (req: Request<{}, {}, IUser>, res: Response) => {
+export const login = async (req: Request<{}, {}, IUser>, res: Response): Promise<Response> => {
   try {
     const { email, password } = req.body;
 
