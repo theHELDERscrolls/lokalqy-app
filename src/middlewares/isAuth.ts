@@ -1,12 +1,7 @@
 import { User } from "../api/models/index.js";
-import type { UserDoc } from "../types/index.js";
+import type { AuthenticatedRequest, UserDoc } from "../types/index.js";
 import { verifyToken } from "../utils/index.js";
-import type { NextFunction, Request, Response } from "express";
-
-// Extendemos el tipo Request de Express para añadir la propiedad user
-interface AuthenticatedRequest extends Request {
-  user?: Omit<UserDoc, "password">; // El usuario autenticado, sin el campo password
-}
+import type { NextFunction, Response } from "express";
 
 /**
  * Middleware de autenticación que verifica:
