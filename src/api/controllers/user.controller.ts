@@ -31,10 +31,16 @@ import { User } from "../models/index.js";
  */
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
-    const users = await User.find().select("-password").populate("properties", "vehicles");
+    // Busca todos los usuarios en la base de datos
+    // .select("-password") excluye el campo password de los resultados por seguridad
+    // .populate("properties") reemplaza los IDs de propiedades con los documentos completos
+    // .populate("vehicles") reemplaza los IDs de vehículos con los documentos completos
+    const users = await User.find().select("-password").populate("properties").populate("vehicles");
 
+    // Devuelve la lista de usuarios con código de estado 200 (éxito)
     return res.status(200).json(users);
   } catch (error) {
+    // Si hay algún error, devuelve código 400 (error del cliente) con mensaje
     return res.status(400).json("Error al obtener los usuarios");
   }
 };
@@ -68,19 +74,24 @@ export const getAllUsers = async (_req: Request, res: Response) => {
  */
 export const getUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
+    // Extrae el ID de los parámetros de la URL
     const { id } = req.params;
 
+    // Busca usuario por ID, excluyendo password y poblando propiedades y vehículos
     const user = await User.findById(id)
       .select("-password")
       .populate("properties")
       .populate("vehicles");
 
+    // Si no encuentra el usuario, devuelve error 404
     if (!user) {
       return res.status(404).json("Usuario no encontrado");
     }
 
+    // Devuelve el usuario encontrado con código 200
     return res.status(200).json(user);
   } catch (error) {
+    // Si hay error (ej: ID inválido), devuelve código 400
     return res.status(400).json("Error al obtener el usuario");
   }
 };
@@ -120,16 +131,23 @@ export const getUser = async (req: Request<{ id: string }>, res: Response) => {
  */
 export const updateUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
+    // Extrae el ID de los parámetros de la URL
     const { id } = req.params;
 
+    // Busca y actualiza el usuario por ID
+    // req.body contiene los campos a actualizar (name, email, etc.)
+    // { new: true } hace que devuelva el documento actualizado en lugar del original
     const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
 
+    // Si no encuentra el usuario, devuelve error 404
     if (!userUpdated) {
       return res.status(404).json("Usuario no encontrado");
     }
 
+    // Devuelve el usuario actualizado con código 200
     return res.status(200).json(userUpdated);
   } catch (error) {
+    // Si hay error en la actualización, devuelve código 400
     return res.status(400).json("Error al actualizar el usuario");
   }
 };
@@ -171,22 +189,29 @@ export const updateUser = async (req: Request<{ id: string }>, res: Response) =>
  */
 export const deleteUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
+    // Extrae el ID de los parámetros de la URL
     const { id } = req.params;
 
+    // Busca y elimina el usuario por ID
+    // .select("-password") excluye el campo password del resultado por seguridad
+    // .populate() incluye los documentos completos de propiedades y vehículos
     const userDeleted = await User.findByIdAndDelete(id)
       .select("-password")
       .populate("properties")
       .populate("vehicles");
 
+    // Si no encuentra el usuario, devuelve error 404
     if (!userDeleted) {
       return res.status(404).json("Usuario no encontrado");
     }
 
+    // Devuelve mensaje de éxito y datos del usuario eliminado con código 200
     return res.status(200).json({
       message: "Usuario eliminado correctamente",
       userDeleted: userDeleted,
     });
   } catch (error) {
+    // Si hay error en la eliminación, devuelve código 400
     return res.status(400).json("Error al eliminar el usuario");
   }
 };
