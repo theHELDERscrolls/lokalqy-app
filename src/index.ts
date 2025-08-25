@@ -1,5 +1,5 @@
 import { authRouter, propertiesRouter, usersRouter, vehiclesRouter } from "./api/routes/index.js";
-import { connectDB } from "./config/index.js";
+import { connectCloudinary, connectDB } from "./config/index.js";
 import dotenv from "dotenv";
 import express, { type NextFunction, type Request, type Response } from "express";
 
@@ -11,6 +11,7 @@ const app = express();
 app.use(express.json());
 
 connectDB();
+connectCloudinary();
 
 app.use("/api/v1/auth/", authRouter);
 app.use("/api/v1/users/", usersRouter);

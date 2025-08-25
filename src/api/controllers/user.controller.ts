@@ -1,21 +1,16 @@
-import type { Request, Response } from "express";
+import { canChangeRole, deleteImgFile, isAdminOrSelf } from "../../utils/index.js";
 import { User } from "../models/index.js";
 import type { AuthenticatedRequest, IUser } from "../../types/index.js";
-import { canChangeRole, isAdminOrSelf } from "../../utils/index.js";
+import type { Request, Response } from "express";
 
 /**
- * Obtiene todos los usuarios del sistema excluyendo información sensible
- * @async
- * @function getAllUsers
- * @param {Request} _req - Objeto Request de Express
- * @param {Response} res - Objeto Response de Express
- * @returns {Promise<Response>} Respuesta JSON con array de usuarios
- * @throws {400} Si ocurre un error en la consulta
- * @throws {200} Si la operación es exitosa
+ * Obtiene todos los usuarios del sistema
+ * @param {Request} _req - Request de Express
+ * @param {Response} res - Response de Express
+ * @returns {Promise<Response>} Array de usuarios sin información sensible
  */
 export const getAllUsers = async (_req: Request, res: Response): Promise<Response> => {
   try {
-    // Obtiene todos los usuarios excluyendo password y poblando relaciones
     const users = await User.find().select("-password").populate("properties").populate("vehicles");
     return res.status(200).json(users);
   } catch (error) {
@@ -24,16 +19,10 @@ export const getAllUsers = async (_req: Request, res: Response): Promise<Respons
 };
 
 /**
- * Obtiene un usuario específico por su ID con validación de permisos
- * @async
- * @function getUser
- * @param {AuthenticatedRequest<{ id: string }>} req - Request con ID y usuario autenticado
- * @param {Response} res - Objeto Response de Express
- * @returns {Promise<Response>} Respuesta JSON con el usuario encontrado
- * @throws {401} Si no tiene permisos para ver el usuario
- * @throws {404} Si el usuario no existe
- * @throws {400} Si ocurre un error en la consulta
- * @throws {200} Si la operación es exitosa
+ * Obtiene un usuario específico por ID
+ * @param {AuthenticatedRequest<{ id: string }>} req - Request con ID de usuario
+ * @param {Response} res - Response de Express
+ * @returns {Promise<Response>} Usuario encontrado o error de permisos
  */
 export const getUser = async (
   req: AuthenticatedRequest<{ id: string }>,
@@ -42,12 +31,11 @@ export const getUser = async (
   try {
     const { id } = req.params;
 
-    // Valida permisos usando función utilitaria
+    // Validación de permisos
     if (!req.user || !isAdminOrSelf(req.user, id)) {
       return res.status(401).json("No tienes permisos para ver este usuario");
     }
 
-    // Busca usuario excluyendo password y poblando relaciones
     const user = await User.findById(id)
       .select("-password")
       .populate("properties")
@@ -64,17 +52,10 @@ export const getUser = async (
 };
 
 /**
- * Actualiza un usuario existente con validación de permisos y roles
- * @async
- * @function updateUser
- * @param {AuthenticatedRequest<{ id: string }, {}, IUser>} req - Request con datos a actualizar
- * @param {Response} res - Objeto Response de Express
- * @returns {Promise<Response>} Respuesta JSON con el usuario actualizado
- * @throws {401} Si no tiene permisos para modificar el usuario
- * @throws {403} Si no tiene permisos para modificar el rol
- * @throws {404} Si el usuario no existe
- * @throws {400} Si ocurre un error en la actualización
- * @throws {200} Si la operación es exitosa
+ * Actualiza un usuario existente
+ * @param {AuthenticatedRequest<{ id: string }>} req - Request con datos actualizados
+ * @param {Response} res - Response de Express
+ * @returns {Promise<Response>} Usuario actualizado o error
  */
 export const updateUser = async (
   req: AuthenticatedRequest<{ id: string }, {}, IUser>,
@@ -83,18 +64,24 @@ export const updateUser = async (
   try {
     const { id } = req.params;
 
-    // Valida permisos básicos usando función utilitaria
+    // Validación de permisos básicos
     if (!req.user || !isAdminOrSelf(req.user, id)) {
+      if (req.file) {
+        await deleteImgFile(req.file.path);
+      }
       return res.status(401).json("No tienes permisos para modificar este usuario");
     }
 
-    // Valida permisos específicos para cambio de rol
+    // Validación de permisos para cambio de rol
     const roleError = canChangeRole(req.user, id, req.body.role);
     if (roleError) {
       return res.status(403).json(roleError);
     }
 
-    // Actualiza el usuario y devuelve el documento actualizado
+    if (req.file) {
+      req.body.image = req.file.path;
+    }
+
     const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!userUpdated) {
@@ -103,21 +90,18 @@ export const updateUser = async (
 
     return res.status(200).json(userUpdated);
   } catch (error) {
+    if (req.file) {
+      await deleteImgFile(req.file.path);
+    }
     return res.status(400).json("Error al actualizar el usuario");
   }
 };
 
 /**
- * Elimina un usuario existente con validación de permisos
- * @async
- * @function deleteUser
- * @param {AuthenticatedRequest<{ id: string }, {}, IUser>} req - Request con ID del usuario
- * @param {Response} res - Objeto Response de Express
- * @returns {Promise<Response>} Respuesta JSON con confirmación
- * @throws {401} Si no tiene permisos para eliminar
- * @throws {404} Si el usuario no existe
- * @throws {400} Si ocurre un error al eliminar
- * @throws {200} Si la operación es exitosa
+ * Elimina un usuario del sistema
+ * @param {AuthenticatedRequest<{ id: string }>} req - Request con ID de usuario
+ * @param {Response} res - Response de Express
+ * @returns {Promise<Response>} Confirmación de eliminación o error
  */
 export const deleteUser = async (
   req: AuthenticatedRequest<{ id: string }, {}, IUser>,
@@ -126,16 +110,19 @@ export const deleteUser = async (
   try {
     const { id } = req.params;
 
-    // Valida permisos usando función utilitaria
     if (!req.user || !isAdminOrSelf(req.user, id)) {
       return res.status(401).json("No tienes permisos para eliminar");
     }
 
-    // Elimina usuario y devuelve datos sin password
     const userDeleted = await User.findByIdAndDelete(id)
       .select("-password")
       .populate("properties")
       .populate("vehicles");
+
+    // Eliminar imagen asociada
+    if (userDeleted?.image) {
+      await deleteImgFile(userDeleted.image);
+    }
 
     if (!userDeleted) {
       return res.status(404).json("Usuario no encontrado");

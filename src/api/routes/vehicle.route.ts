@@ -1,4 +1,4 @@
-import { isAuth } from "../../middlewares/index.js";
+import { isAuth, upload } from "../../middlewares/index.js";
 import express from "express";
 import {
   createVehicle,
@@ -12,6 +12,6 @@ export const vehiclesRouter = express.Router();
 
 vehiclesRouter.get("/", getVehicles);
 vehiclesRouter.get("/:id", getVehicle);
-vehiclesRouter.post("/", isAuth, createVehicle);
-vehiclesRouter.put("/:id", isAuth, updateVehicle);
+vehiclesRouter.post("/", isAuth, upload.single("image"), createVehicle);
+vehiclesRouter.put("/:id", isAuth, upload.single("image"), updateVehicle);
 vehiclesRouter.delete("/:id", isAuth, deleteVehicle);
