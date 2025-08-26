@@ -13,7 +13,6 @@
 - [[#Estructura del proyecto]].
 - [[#Uso / API]].
 - [[#Resolución de problemas]].
-- [[#Contribución]].
 - [[#Licencia]].
 - [[#Créditos]].
 
@@ -798,49 +797,6 @@ Si los problemas persisten después de seguir estas soluciones:
    - [JSON Web Tokens](https://jwt.io/)
 
 > 💡 **Tip:** Siempre verifica que estás usando la última versión estable de las dependencias con `npm outdated` y actualiza con `npm update`.
-
----
-
-## Contribución
-
-¡Las contribuciones son bienvenidas! 🎉  
-Si quieres mejorar este proyecto, por favor sigue estos pasos:
-
-1. **Haz un fork** del repositorio.
-2. Crea una nueva rama para tu funcionalidad o corrección:
-
-```bash
-git checkout -b feature/nueva-funcionalidad
-```
-
-3. Realiza tus cambios y asegúrate de que todo funcione correctamente.
-4. Ejecuta los tests (si existen) o prueba manualmente los endpoints.
-5. Haz commit de tus cambios con un mensaje claro:
-
-```bash
-git commit -m "feat: añade nueva funcionalidad X"
-```
-
-6. **Sube tu rama** a tu fork:
-
-```bash
-git push origin feature/nueva-funcionalidad
-```
-
-7. Abre una **Pull Request** hacia la rama `main` de este repositorio.
-
-### Reglas básicas
-
-- Sigue la convención de commits de tipo [Conventional Commits](https://www.conventionalcommits.org/es/v1.0.0/).  
-   Ejemplos:
-  - `feat: agrega endpoint para exportar reportes`
-  - `fix: corrige validación de emails`
-  - `docs: mejora sección de instalación`
-- Usa TypeScript de manera estricta (sin `any` innecesarios).
-- Mantén la consistencia con la arquitectura del proyecto (MVC + middlewares + utils).
-- Documenta brevemente tus cambios en el README o en comentarios de código si es necesario.
-
----
 
 ---
 
