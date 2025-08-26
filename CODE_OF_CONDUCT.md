@@ -1,5 +1,3 @@
-## CODE_OF_CONDUCT.md
-
 # Código de Conducta
 
 ## Nuestro compromiso
