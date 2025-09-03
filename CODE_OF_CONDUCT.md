@@ -34,7 +34,7 @@ Este Código de Conducta aplica tanto dentro de los espacios del proyecto como e
 
 ## Aplicación
 
-Instancias de comportamiento abusivo, acosador o inaceptable de otro modo pueden ser reportadas contactando al equipo del proyecto en [INSERTAR_EMAIL]. Todas las quejas serán revisadas e investigadas y resultarán en una respuesta que se considere necesaria y apropiada a las circunstancias. El equipo del proyecto está obligado a mantener confidencialidad respecto al reportero de un incidente.
+Instancias de comportamiento abusivo, acosador o inaceptable de otro modo pueden ser reportadas contactando al equipo del proyecto en **manuhelderruiz@gmail.com**. Todas las quejas serán revisadas e investigadas y resultarán en una respuesta que se considere necesaria y apropiada a las circunstancias. El equipo del proyecto está obligado a mantener confidencialidad respecto al reportero de un incidente.
 
 ## Atribución
 
