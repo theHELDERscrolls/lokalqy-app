@@ -35,8 +35,6 @@ npm start
 
 ## 📚 Documentación Completa
 
-## 📚 Documentación Completa
-
 | Sección             | Descripción                                  | Enlaces                           |
 | ------------------- | -------------------------------------------- | --------------------------------- |
 | 🏁 **Introducción** | Objetivos, motivación y visión del proyecto  | [Ver](docs/01-intro.md)           |
